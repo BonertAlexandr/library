@@ -1,0 +1,31 @@
+<%@page import="ua.training.web.beans.Genre"%>
+<%@page pageEncoding="UTF-8"%>
+
+<%  
+    long selectedGenreId = 0L;
+    if (request.getParameter("genre_id") != null) {
+        selectedGenreId = Long.parseLong(request.getParameter("genre_id"));
+        session.setAttribute("selectedGenreId", selectedGenreId);    
+    } else if (session.getAttribute("selectedGenreId") != null) {
+        selectedGenreId = Long.parseLong(session.getAttribute("selectedGenreId").toString());
+    }    
+%>
+<div class="sidebar1">
+                <h4>Список жанров:</h4>
+                <ul class="nav">
+                <jsp:useBean id="genreList" class="ua.training.web.beans.GenreList" scope="application"/>
+                <li><a href="books.jsp?genre_id=0">Все книги</a></li>
+                    <%
+                    for (Genre genre : genreList.getGenreList()) {
+                        if ((selectedGenreId != 0) && (selectedGenreId == genre.getId())) {
+                    %>                        
+                            <li><a style="font-weight: bold;" href="books.jsp?genre_id=<%=genre.getId()%>&name=<%=genre.getName()%>"><%=genre.getName()%></a></li>                        
+                    <%  } else {
+                    %>        
+                            <li><a href="books.jsp?genre_id=<%=genre.getId()%>&name=<%=genre.getName()%>"><%=genre.getName()%></a></li>
+                    <%  }                                                                   
+                    }
+                    %>
+                </ul>
+                <p>&nbsp;</p>
+</div>
